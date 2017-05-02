@@ -1,13 +1,15 @@
+const dotEnv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
 
 const birthdaysRoute = require('./src/routes/birthdays');
+const activeDirRoute = require('./src/controllers/active-directory');
 
 const app = express();
 
-const dbName = 'comp-boards';
+dotEnv.config();
 
-mongoose.connect('localhost:27017/' + dbName);
+mongoose.connect(process.env.MONGO_DB_URL);
 
 app.route('/')
     .get((req, res) => {
@@ -15,6 +17,7 @@ app.route('/')
     });
 
 app.use('/birthdays', birthdaysRoute);
+app.use('/dir', activeDirRoute);
 
 app.listen(3000, () => {
     console.log('Example app listening on port 3000!')
